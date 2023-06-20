@@ -88,7 +88,6 @@ def download_VIXfutures(expiry_list = [], clean_path = False, current_path = '')
             f.write(response.content)       
         print(f"Archivo {filename} descargado exitosamente en {path}") 
 
-
     for expiry in past_expiry_list: 
         filename = 'VX_' + expiry + '.csv'
         url= urlbase + 'VX_' + expiry + '.csv'
@@ -136,3 +135,10 @@ def download_VIXindexes(current_path = ''):
     yf.download('^VIX3M', period = 'max', interval = '1d').to_csv(ruta, index=True)
     # df.to_csv(ruta, index=True)
     print(f"Archivo {ruta} descargado exitosamente")
+
+    # DESCARGA DEL SP500 (DESDE YFINANCE)
+    ruta = path + '\\SPX.csv'
+    yf.download('^SPX', period = 'max', interval = '1d').to_csv(ruta, index=True)
+    # df.to_csv(ruta, index=True)
+    print(f"Archivo {ruta} descargado exitosamente")
+    
