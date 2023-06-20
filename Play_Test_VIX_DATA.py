@@ -24,7 +24,7 @@ gvd.download_VIXindexes(current_path = CURRENT_PATH)
 #LOAD AND PROCESS DATA FUNCTIONS
 data_current_futures = pvd.load_current_VIXfutures(current_path = CURRENT_PATH)
 data_expired_futures = pvd.load_expired_VIXfutures(current_path = CURRENT_PATH)
-
+data_VIX_indexs = pvd.load_VIXindexs(current_path = CURRENT_PATH)
 
 
 
