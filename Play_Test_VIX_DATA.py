@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Cesc_py
+cesc_py
 """
 # DEFINIR DIRECTORIO DONDE ESTA EL ARCHIVO
 CURRENT_PATH = 'C:\\Py\\00_PROJECTS\\TOTAL_VIX'
@@ -13,6 +13,8 @@ os.chdir(CURRENT_PATH)
 import GET_VIX_DATA_CBOE as gvd
 import LOAD_VIX_DATA_CBOE as lvd
 import PROCESS_VIX_DATA as pvd
+
+import VIX_RATIOS as vr
 
 
 # gvd.del_VIX_Data('C:\\Py\\00_PROJECTS\\TOTAL_VIX\\VIX_DATA')
@@ -36,3 +38,11 @@ data_combined_total = pvd.combine_dictDB(dicts = [data_current_futures, data_exp
 data_combined_current = pvd.combine_dictDB(dicts = [data_current_futures, data_VIX_indexs])
 data_combined_expired = pvd.combine_dictDB(dicts = [data_expired_futures, data_VIX_indexs])
 
+
+
+
+
+# CALCULATE VIX RATIOS
+VIX_ratios = vr.calculate_VIX_ratios(data = data_VIX_indexs)
+
+# data = VIX_ratios
