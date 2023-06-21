@@ -24,5 +24,5 @@ Carga toda la data descargada en diccionarios de dataframes:
 - Diccionario con los dataframes de los futuros expirados
 - Diccionario con los dataframes de los índices
 
-### VIX Ratios
+### VIX_RATIOS
 Calculo y graficado del VIX ratio y algo más.
