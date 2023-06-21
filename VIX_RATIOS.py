@@ -39,7 +39,6 @@ def calculate_VIX_ratios(data = ''):
     return VIX_ratios    
     
 def graph_vixratios(data = ''):
-    pass
 
     data = data.copy()
     
@@ -55,7 +54,7 @@ def graph_vixratios(data = ''):
     
     # Graficar las series de los dataframes del diccionario
     plt.plot(data['VIX9D/VIX3M']['Date'], data['VIX9D/VIX3M']['VIX9D/VIX3M'], label='VIX9D/VIX3M')
-    # plt.plot(data['VIX9D/VIX']['Date'], data['VIX9D/VIX']['VIX9D/VIX'], label='VIX9D/VIX')
+    plt.plot(data['VIX9D/VIX']['Date'], data['VIX9D/VIX']['VIX9D/VIX'], label='VIX9D/VIX')
     plt.plot(data['VIX/VIX3M']['Date'], data['VIX/VIX3M']['VIX/VIX3M'], label='VIX/VIX3M')
     plt.axhline(1, color='r', linestyle='--')   
     

@@ -31,18 +31,20 @@ data_current_futures = lvd.load_current_VIXfutures(current_path = CURRENT_PATH)
 data_expired_futures = lvd.load_expired_VIXfutures(current_path = CURRENT_PATH)
 data_VIX_indexs = lvd.load_VIXindexs(current_path = CURRENT_PATH)
 
+'''
 #PROCESSES DATA. PROCESS DATA FUNCTIONS
 # Examples combine datas
 data_combined_futures = pvd.combine_dictDB(dicts = [data_current_futures, data_expired_futures])
 data_combined_total = pvd.combine_dictDB(dicts = [data_current_futures, data_expired_futures, data_VIX_indexs])
 data_combined_current = pvd.combine_dictDB(dicts = [data_current_futures, data_VIX_indexs])
 data_combined_expired = pvd.combine_dictDB(dicts = [data_expired_futures, data_VIX_indexs])
-
+'''
 
 
 
 
 # CALCULATE VIX RATIOS
 VIX_ratios = vr.calculate_VIX_ratios(data = data_VIX_indexs)
-
+data_combined_ratios = pvd.combine_dictDB(dicts = [data_VIX_indexs, VIX_ratios])
+vr.graph_vixratios(data = data_combined_ratios)
 # data = VIX_ratios
