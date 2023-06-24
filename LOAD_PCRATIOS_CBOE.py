@@ -9,6 +9,9 @@ import os
 import requests
 import re
 import yfinance as yf
+import matplotlib.pyplot as plt
+from matplotlib.widgets import MultiCursor 
+from matplotlib.widgets import Cursor  
 
 current_path = CURRENT_PATH
 
@@ -220,7 +223,8 @@ def update_PCR_archive(current_path = ''):
 def load_PCR_data(current_path = ''):
 
     current_path = current_path
-    
+    os.chdir(current_path + '\\PC_RATIOS_DATA') 
+
     df_total = pd.read_csv('PCR_total.csv')
     df_index = pd.read_csv('PCR_index.csv')
     df_etp = pd.read_csv('PCR_etp.csv')
@@ -229,11 +233,15 @@ def load_PCR_data(current_path = ''):
     df_SPX = pd.read_csv('PCR_SPX.csv')
     df_OEX = pd.read_csv('PCR_OEX.csv')
     df_RUT = pd.read_csv('PCR_RUT.csv')
+    
+    
+def process_PCR_data():  
+    pass
 
-'''
+
 def graph_PCR_data():
     
-    date_threshold = datetime.datetime.strptime('2016-01-01', '%Y-%m-%d').date()
+    date_threshold = datetime.datetime.strptime('2022-06-01', '%Y-%m-%d').date()
     df_total['Date'] = pd.to_datetime(df_total['Date']).dt.date
     df_index['Date'] = pd.to_datetime(df_index['Date']).dt.date
     df_etp['Date'] = pd.to_datetime(df_etp['Date']).dt.date
@@ -250,47 +258,75 @@ def graph_PCR_data():
     
     data['Date'] = pd.to_datetime(data['Date']).dt.date
 
-    data['SPX']= data[data['Date'] > date_threshold]['SPX']
-    data['VIX']= data[data['Date'] > date_threshold]['VIX']
+    df = pd.DataFrame()
+    df['Date']= data[data['Date'] > date_threshold]['Date']
+    df['SPX']= data[data['Date'] > date_threshold]['SPX']
+    df['VIX']= data[data['Date'] > date_threshold]['VIX']
     
     
-    data['PCR_total'] =  df_total['PC_RATIO']
-    data['PCR_total'] =  df_total[df_total['Date'] > date_threshold]['PC_RATIO']
+    df_total.index = df_total['Date']
+    df_total.index = pd.to_datetime(df_total.index)
+    # df = df.join(df_total['PC_RATIO']).add_suffix('_total')
+    df = df.merge(df_total[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_total'))
     
-    data['PCR_index'] =  df_index['PC_RATIO'][df_index['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_etp'] =  df_etp['PC_RATIO'][ df_etp['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_equity'] = df_equity['PC_RATIO'][ df_equity['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_VIX'] = df_VIX['PC_RATIO'][ df_VIX['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_SPX'] = df_SPX['PC_RATIO'][ df_SPX['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_OEX'] = df_OEX['PC_RATIO'][ df_OEX['PC_RATIO']['Date'] > date_threshold]
-    data['PCR_RUT'] = df_RUT['PC_RATIO'][ df_RUT['PC_RATIO']['Date'] > date_threshold]
+    df_index.index = df_index['Date']
+    df_index.index = pd.to_datetime(df_index.index)
+    df = df.merge(df_index[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_index'))
 
+    df_equity.index = df_equity['Date']
+    df_equity.index = pd.to_datetime(df_equity.index)
+    df = df.merge(df_equity[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_equity'))
     
+    df_SPX.index = df_SPX['Date']
+    df_SPX.index = pd.to_datetime(df_SPX.index)
+    df = df.merge(df_SPX[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_SPX'))
 
+    df_VIX.index = df_VIX['Date']
+    df_VIX.index = pd.to_datetime(df_VIX.index)
+    df = df.merge(df_VIX[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_VIX'))
+    
+    df_OEX.index = df_OEX['Date']
+    df_OEX.index = pd.to_datetime(df_OEX.index)
+    df = df.merge(df_OEX[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_OEX'))   
+    
+    df_etp.index = df_etp['Date']
+    df_etp.index = pd.to_datetime(df_etp.index)
+    df = df.merge(df_etp[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_etp'))       
+    
+    df_RUT.index = df_RUT['Date']
+    df_RUT.index = pd.to_datetime(df_RUT.index)
+    df = df.merge(df_RUT[['PC_RATIO']], left_index=True, right_index=True, how='left', suffixes=('', '_RUT'))   
+
+## Grafic
     plt.figure(figsize=(12, 6))
     
     # Graficar las series de los dataframes del diccionario
-    plt.plot(data['VIX9D/VIX3M']['Date'], data['VIX9D/VIX3M']['VIX9D/VIX3M'], label='VIX9D/VIX3M')
-    plt.plot(data['VIX9D/VIX']['Date'], data['VIX9D/VIX']['VIX9D/VIX'], label='VIX9D/VIX')
-    plt.plot(data['VIX/VIX3M']['Date'], data['VIX/VIX3M']['VIX/VIX3M'], label='VIX/VIX3M')
-    plt.axhline(1, color='r', linestyle='--')   
+    plt.plot(df.index, df['PC_RATIO'], label='PC_RATIO')
+    plt.plot(df.index, df['PC_RATIO_index'], label='PC_RATIO_index')
+    plt.plot(df.index, df['PC_RATIO_equity'], label='PC_RATIO_equity')
+    plt.plot(df.index, df['PC_RATIO_SPX'], label='PC_RATIO_SPX')
+    # plt.plot(df.index, df['PC_RATIO_VIX'], label='PC_RATIO_VIX')
+    # plt.plot(df.index, df['PC_RATIO_OEX'], label='PC_RATIO_OEX')
+    # plt.plot(df.index, df['PC_RATIO_etp'], label='PC_RATIO_etp')
+    plt.axhline(1, color='r', linestyle='--') 
+    plt.axhline(2, color='r', linestyle='--')  
     
     ax = plt.gca()
     ax2 = ax.twinx()
-    ax2.plot(data['SPX']['Date'], data['SPX']['Close'], color='purple', label='SPX Close')
+    ax2.plot(df.index, df['SPX'], color='purple', label='SPX Close')
     ax2.set_ylabel('SPX Close', color='purple')
     plt.xlabel('Date')
     plt.ylabel('Value')
-    plt.title('VIX Ratios and SPX')
+    plt.title('P/C Ratios and SPX')
     # plt.legend()
     ax.legend()
     
     # multi = MultiCursor(None, (ax, ax2), color='r', lw=1)
     cursor = Cursor(ax2, color='r', lw=1)
     plt.show()
-'''  
+ 
     
-    
+correl = df.iloc[: ,3:].corr()   
     
     
     
