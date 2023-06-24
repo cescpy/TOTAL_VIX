@@ -22,15 +22,15 @@ SPX_trends.loc['2022-10-14':'2023-06-20', 'Primary'] = 1
 SPX_trends.loc['2023-03-14':'2023-06-16', 'Secondary'] = 1
 SPX_trends.loc['2023-02-03':'2023-03-13', 'Secondary'] = -1
 SPX_trends.loc['2022-12-28': '2023-02-02', 'Secondary'] = 1
-SPX_trends.loc['2022-12-14': '2022-12-27', 'Secondary'] = -1
-SPX_trends.loc['2022-10-14': '2022-12-13', 'Secondary'] = 1
+SPX_trends.loc['2022-11-30': '2022-12-27', 'Secondary'] = -1
+SPX_trends.loc['2022-10-14': '2022-12-01', 'Secondary'] = 1
 SPX_trends.loc['2022-08-17': '2022-10-13', 'Secondary'] = -1
 SPX_trends.loc['2022-06-21': '2022-08-16', 'Secondary'] = 1
 SPX_trends.loc['2022-06-03': '2022-06-20', 'Secondary'] = -1
 SPX_trends.loc['2022-05-23': '2022-06-02', 'Secondary'] = 1
 SPX_trends.loc['2022-03-30': '2022-05-22', 'Secondary'] = -1
-SPX_trends.loc['2022-03-15': '2022-03-29', 'Secondary'] = 1
-SPX_trends.loc['2022-01-05': '2022-03-15', 'Secondary'] = -1
+SPX_trends.loc['2022-03-13': '2022-03-29', 'Secondary'] = 1
+SPX_trends.loc['2022-01-05': '2022-03-14', 'Secondary'] = -1
 SPX_trends.loc['2021-12-03': '2022-01-04', 'Secondary'] = 1
 
 
@@ -38,7 +38,29 @@ SPX_trends.loc['2021-12-03': '2022-01-04', 'Secondary'] = 1
 
 
 
-# Grafico
+# Grafico linea colores
+t = SPX_trends.index
+f = SPX_trends['Secondary']
+s = SPX_trends['Close_SPX']
+
+inrange = np.ma.masked_where(f == 0, s)
+bullish = np.ma.masked_where(f == 1, s)
+bearish = np.ma.masked_where(f == -1, s)
+
+fig, ax = plt.subplots()
+ax.plot(t, inrange, color = 'blue', label='In range')
+ax.plot(t, bearish, color = 'green', label='Bearish')
+ax.plot(t, bullish, color = 'red', label='Bullish')
+
+ax.legend()
+plt.show()
+
+
+
+
+
+
+# Grafico linea
 fig, ax = plt.subplots()
 
 # Configurar el color de la línea en función de SPX_trends['Secondary']
@@ -59,7 +81,7 @@ plt.show()
 
 
 ##############################
-# Create a figure and axes
+# Grafico linea puntos colores
 fig, ax = plt.subplots()
 
 ax.plot(SPX_trends.index, SPX_trends['Close_SPX'], color='blue', linewidth=1)
